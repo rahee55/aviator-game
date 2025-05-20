@@ -8,51 +8,37 @@ class mainScene extends Scene {
     this.aviatorJet = null;
     this.trailGraphics = null;
     this.trailPoints = [];
+    this.vimaan = null;
   }
 
   preload() {
-    this.load.spritesheet("aviator", "/sprite3.png", {
-      frameWidth: 300 / 2,
-      frameHeight: 71 / 1,
+    this.load.spritesheet("aviator", "/sprite2.png", {
+      frameWidth: 200 / 2,
+      frameHeight: 48 / 1,
     });
     this.load.image("bgR", "/bgSun.svg");
     this.load.image("bgbright", "/blur.svg");
+
+    this.load.image(`vimaan_1`, `/vimaan1.svg`);
+    this.load.image(`vimaan_2`, `/vimaan2.svg`);
   }
 
   create() {
     let bg = this.add.image(-1, 500, "bgR");
-    this.aviatorJet = this.add.sprite(0, 499, "aviator");
+
     this.anims.create({
       key: "aviators",
-      frames: this.anims.generateFrameNumbers("aviator", {
-        start: 0,
-        end: 1,
-      }),
+      frames: [{ key: "vimaan_1" }, { key: "vimaan_2" }],
       frameRate: 10,
       repeat: -1,
     });
 
-    // this.aviatorJet.play("aviators");
-
-    let points = [
-      new Phaser.Math.Vector2(0, 500),
-      new Phaser.Math.Vector2(150, 480),
-      new Phaser.Math.Vector2(300, 445),
-      new Phaser.Math.Vector2(450, 390),
-      new Phaser.Math.Vector2(600, 310),
-      new Phaser.Math.Vector2(700, 230),
-    ];
-
-    this.path = new Phaser.Curves.Path(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) {
-      this.path.lineTo(points[i].x, points[i].y);
-    }
-
-    this.aviatorJet.setPosition(points[0].x, points[0].y);
+    this.aviatorJet = this.add.sprite(80, 459, "vimaan_1");
+    this.aviatorJet.play("aviators");
 
     this.tweens.add({
       targets: this.aviatorJet,
-      duration: 3000,
+      duration: 4000,
       ease: "Linear",
       repeat: 0,
       onUpdate: (tween) => {
@@ -74,7 +60,7 @@ class mainScene extends Scene {
 
     this.lastUpdateTime = 0;
 
-    let randomStopTime = Phaser.Math.Between(0, 10000);
+    let randomStopTime = Phaser.Math.Between(20000, 60000);
 
     this.stopTriggered = true;
 
@@ -96,8 +82,8 @@ class mainScene extends Scene {
       .setDepth(10)
       .on("pointerdown", () => {
         this.tweens.killAll();
-        this.aviatorJet.setPosition(0, 489);
-        this.aviatorJet.anims.stop();
+
+        this.aviatorJet.setPosition(80, 459);
         this.aviatorJet.setFrame(0);
         this.trailGraphics.clear();
         this.trailPoints = [];
@@ -122,12 +108,12 @@ class mainScene extends Scene {
         this.aviatorJet.play("aviators");
 
         this.curvePoints = [
-          new Phaser.Math.Vector2(0, 500),
-          new Phaser.Math.Vector2(150, 480),
-          new Phaser.Math.Vector2(300, 445),
-          new Phaser.Math.Vector2(450, 390),
-          new Phaser.Math.Vector2(600, 310),
-          new Phaser.Math.Vector2(700, 230),
+          new Phaser.Math.Vector2(70, 464),
+          new Phaser.Math.Vector2(220, 449),
+          new Phaser.Math.Vector2(370, 414),
+          new Phaser.Math.Vector2(520, 359),
+          new Phaser.Math.Vector2(670, 269),
+          new Phaser.Math.Vector2(770, 189),
         ];
 
         this.path = new Phaser.Curves.Spline(this.curvePoints);
@@ -140,16 +126,29 @@ class mainScene extends Scene {
         this.trailPoints = [];
         this.trailGraphics.clear();
 
-        let trailPointCollector = { t: 0 };
+        let hasReachedEnd = false;
 
         this.tweens.add({
           targets: { t: 0 },
           t: 1,
-          duration: 3000,
+          duration: 4000,
           onUpdate: (tween) => {
             const t = tween.getValue();
             const point = this.path.getPoint(t);
             this.aviatorJet.setPosition(point.x, point.y);
+
+            if (t >= 1 && !hasReachedEnd) {
+              hasReachedEnd = true;
+
+              this.tweens.add({
+                targets: this.aviatorJet,
+                y: "+=150",
+                duration: 2000,
+                yoyo: true,
+                repeat: -1,
+                ease: "Sine.easeInOut",
+              });
+            }
           },
         });
 
@@ -161,7 +160,7 @@ class mainScene extends Scene {
           repeat: -1,
         });
 
-        let newStopTime = Phaser.Math.Between(2000, 10000);
+        let newStopTime = Phaser.Math.Between(20000, 60000);
         this.time.delayedCall(newStopTime, () => {
           this.stopTriggered = true;
           this.tweens.add({
@@ -182,7 +181,7 @@ class mainScene extends Scene {
       });
 
     let crashButton = this.add
-      .text(230, 20, "FLY", {
+      .text(230, 20, "Fly", {
         font: "bold 28px Arial",
         fill: "#ffffff",
         backgroundColor: "#ff0044",
@@ -195,7 +194,7 @@ class mainScene extends Scene {
           targets: this.aviatorJet,
           x: 1900,
           y: 150,
-          duration: 600,
+          duration: 600
         });
 
         this.trailGraphics.clear();
@@ -215,32 +214,33 @@ class mainScene extends Scene {
       (this.trailPoints.length === 0 ||
         !Phaser.Math.Fuzzy.Equal(jet.x, jet.y, 1))
     ) {
-      this.trailPoints.push(new Phaser.Math.Vector2(jet.x, jet.y));
+      this.trailPoints.push(new Phaser.Math.Vector2(jet.x - 55, jet.y + 31));
     }
     if (this.trailPoints.length > 1) {
       this.trailGraphics.clear();
 
-      this.trailGraphics.lineStyle(3, 0xff0044, 1);
+      this.trailGraphics.lineStyle(4, 0xff0044, 1);
       this.trailGraphics.beginPath();
       this.trailGraphics.moveTo(this.trailPoints[0].x, this.trailPoints[0].y);
-
       for (let i = 1; i < this.trailPoints.length; i++) {
         this.trailGraphics.lineTo(this.trailPoints[i].x, this.trailPoints[i].y);
       }
 
       this.trailGraphics.strokePath();
-
-      const start = this.trailPoints[0];
-      const end = this.trailPoints[this.trailPoints.length - 1];
-      const baseY = 500;
-
+      const baseY = 700;
       this.trailGraphics.fillStyle(0xff0044, 0.3);
-      this.trailGraphics.moveTo(start.x, start.y);
+      this.trailGraphics.beginPath();
+      this.trailGraphics.moveTo(this.trailPoints[0].x, this.trailPoints[0].y);
       for (let i = 1; i < this.trailPoints.length; i++) {
         this.trailGraphics.lineTo(this.trailPoints[i].x, this.trailPoints[i].y);
       }
-      this.trailGraphics.lineTo(end.x, 700);
-      this.trailGraphics.lineTo(start.x, 700);
+
+      const last = this.trailPoints[this.trailPoints.length - 1];
+      const first = this.trailPoints[0];
+
+      this.trailGraphics.lineTo(last.x, baseY);
+      this.trailGraphics.lineTo(first.x, baseY);
+      this.trailGraphics.closePath();
       this.trailGraphics.fillPath();
     }
 
