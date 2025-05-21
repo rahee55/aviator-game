@@ -27,26 +27,14 @@ class mainScene extends Scene {
     let bg = this.add.image(-1, 500, "bgR");
 
     this.anims.create({
-      key: "aviators",
+      key: "aviatorsJ",
       frames: [{ key: "vimaan_1" }, { key: "vimaan_2" }],
       frameRate: 10,
       repeat: -1,
     });
 
     this.aviatorJet = this.add.sprite(80, 459, "vimaan_1");
-    this.aviatorJet.play("aviators");
-
-    this.tweens.add({
-      targets: this.aviatorJet,
-      duration: 4000,
-      ease: "Linear",
-      repeat: 0,
-      onUpdate: (tween) => {
-        let t = tween.progress;
-        let pos = this.path.getPoint(t);
-        this.aviatorJet.setPosition(pos.x, pos.y);
-      },
-    });
+    this.aviatorJet.play("aviatorsJ");
 
     this.trailGraphics = this.add.graphics();
     this.trailGraphics.lineStyle(3, 0xff0044, 1);
@@ -70,29 +58,7 @@ class mainScene extends Scene {
       this.trailGraphics.clear();
       this.trailPoints = [];
     });
-
-    let resetButton = this.add
-      .text(20, 20, "Reset", {
-        font: "bold 28px Arial",
-        fill: "#ffffff",
-        backgroundColor: "#f00f00",
-        padding: { x: 10, y: 5 },
-      })
-      .setInteractive()
-      .setDepth(10)
-      .on("pointerdown", () => {
-        this.tweens.killAll();
-
-        this.aviatorJet.setPosition(80, 459);
-        this.aviatorJet.setFrame(0);
-        this.trailGraphics.clear();
-        this.trailPoints = [];
-
-        this.multiplier = 1;
-        this.text.setText("1.00X");
-
-        this.stopTriggered = true;
-      });
+    let light = this.add.image(500, 250, "bgbright").setScale(1.2);
 
     this.add
       .text(130, 20, "Start", {
@@ -104,17 +70,19 @@ class mainScene extends Scene {
       .setInteractive()
       .on("pointerdown", () => {
         this.stopTriggered = false;
-        let light = this.add.image(500, 250, "bgbright").setScale(1.2);
-        this.aviatorJet.play("aviators");
 
-        this.curvePoints = [
-          new Phaser.Math.Vector2(70, 464),
-          new Phaser.Math.Vector2(220, 449),
-          new Phaser.Math.Vector2(370, 414),
-          new Phaser.Math.Vector2(520, 359),
-          new Phaser.Math.Vector2(670, 269),
-          new Phaser.Math.Vector2(770, 189),
-        ];
+        this.curvePoints = [];
+        let startX = 80;
+        let startY = 459;
+        let endX = 770;
+        let steps = 6;
+
+        for (let i = 0; i <= steps; i++) {
+          let s = i / steps;
+          let x = Phaser.Math.Linear(startX, endX, s);
+          let y = startY - Math.pow(s, 2.5) * 300;
+          this.curvePoints.push(new Phaser.Math.Vector2(x, y));
+        }
 
         this.path = new Phaser.Curves.Spline(this.curvePoints);
 
@@ -123,8 +91,8 @@ class mainScene extends Scene {
           this.curvePoints[0].y
         );
 
-        this.trailPoints = [];
         this.trailGraphics.clear();
+        this.trailPoints = [];
 
         let hasReachedEnd = false;
 
@@ -141,9 +109,9 @@ class mainScene extends Scene {
               hasReachedEnd = true;
 
               this.tweens.add({
-                targets: this.aviatorJet,
-                y: "+=150",
-                duration: 2000,
+                targets: [this.aviatorJet, this.trailGraphics],
+                y: "+=100",
+                duration: 3000,
                 yoyo: true,
                 repeat: -1,
                 ease: "Sine.easeInOut",
@@ -171,16 +139,38 @@ class mainScene extends Scene {
           });
           this.trailGraphics.clear();
           this.trailPoints = [];
-
-          this.multiplier = 1;
-          this.text.setText("1.00X");
+          this.text.setColor(0x00f040);
           this.tweens.killTweensOf(bg);
 
           light.destroy();
         });
       });
 
-    let crashButton = this.add
+    let resetButton = this.add
+      .text(20, 20, "Reset", {
+        font: "bold 28px Arial",
+        fill: "#ffffff",
+        backgroundColor: "#f00f00",
+        padding: { x: 10, y: 5 },
+      })
+      .setInteractive()
+      .setDepth(10)
+      .on("pointerdown", () => {
+        this.tweens.killAll();
+        this.aviatorJet.setPosition(80, 459);
+        this.trailGraphics.moveTo(this.trailPoints[0].x, this.trailPoints[0].y);
+        this.aviatorJet.setFrame(0);
+        this.trailGraphics.clear();
+        this.trailPoints = [];
+
+        this.multiplier = 1;
+        this.text.setText("1.00X");
+
+        this.stopTriggered = true;
+        this.scene.restart();
+      });
+
+    this.add
       .text(230, 20, "Fly", {
         font: "bold 28px Arial",
         fill: "#ffffff",
@@ -190,15 +180,22 @@ class mainScene extends Scene {
       .setInteractive()
       .setDepth(10)
       .on("pointerdown", () => {
+        this.tweens.killAll();
+
         this.tweens.add({
           targets: this.aviatorJet,
           x: 1900,
           y: 150,
-          duration: 600
+          duration: 600,
         });
 
-        this.trailGraphics.clear();
+        this.multiplier = 1;
+        this.text.setText("1.00X");
+
+        this.stopTriggered = true;
+
         this.trailPoints = [];
+        this.trailGraphics.clear();
       });
   }
 
@@ -212,7 +209,16 @@ class mainScene extends Scene {
     if (
       jet &&
       (this.trailPoints.length === 0 ||
-        !Phaser.Math.Fuzzy.Equal(jet.x, jet.y, 1))
+        !Phaser.Math.Fuzzy.Equal(
+          jet.x,
+          this.trailPoints[this.trailPoints.length - 1].x,
+          1
+        ) ||
+        !Phaser.Math.Fuzzy.Equal(
+          jet.y,
+          this.trailPoints[this.trailPoints.length - 1].y,
+          1
+        ))
     ) {
       this.trailPoints.push(new Phaser.Math.Vector2(jet.x - 55, jet.y + 31));
     }
