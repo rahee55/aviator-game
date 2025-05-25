@@ -26,12 +26,14 @@ class mainScene extends Scene {
   create() {
     let bg = this.add.image(-1, 500, "bgR");
 
-    this.anims.create({
-      key: "aviatorsJ",
-      frames: [{ key: "vimaan_1" }, { key: "vimaan_2" }],
-      frameRate: 10,
-      repeat: -1,
-    });
+    if (!this.anims.exists("aviatorsJ")) {
+      this.anims.create({
+        key: "aviatorsJ",
+        frames: [{ key: "vimaan_1" }, { key: "vimaan_2" }],
+        frameRate: 6,
+        repeat: -1,
+      });
+    }
 
     this.aviatorJet = this.add.sprite(80, 459, "vimaan_1");
     this.aviatorJet.play("aviatorsJ");
@@ -99,7 +101,7 @@ class mainScene extends Scene {
         this.tweens.add({
           targets: { t: 0 },
           t: 1,
-          duration: 4000,
+          duration: 5000,
           onUpdate: (tween) => {
             const t = tween.getValue();
             const point = this.path.getPoint(t);
@@ -108,7 +110,7 @@ class mainScene extends Scene {
             if (t >= 1 && !hasReachedEnd) {
               hasReachedEnd = true;
 
-              this.tweens.add({
+              let delayTweeen = this.tweens.add({
                 targets: [this.aviatorJet, this.trailGraphics],
                 y: "+=100",
                 duration: 3000,
@@ -139,7 +141,7 @@ class mainScene extends Scene {
           });
           this.trailGraphics.clear();
           this.trailPoints = [];
-          this.text.setColor(0x00f040);
+          this.text.setColor(0xf00f00);
           this.tweens.killTweensOf(bg);
 
           light.destroy();
@@ -156,9 +158,9 @@ class mainScene extends Scene {
       .setInteractive()
       .setDepth(10)
       .on("pointerdown", () => {
+        this.tweens.killTweensOf([this.aviatorJet, this.trailGraphics]);
         this.tweens.killAll();
         this.aviatorJet.setPosition(80, 459);
-        this.trailGraphics.moveTo(this.trailPoints[0].x, this.trailPoints[0].y);
         this.aviatorJet.setFrame(0);
         this.trailGraphics.clear();
         this.trailPoints = [];
