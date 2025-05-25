@@ -35,7 +35,7 @@ class mainScene extends Scene {
       });
     }
 
-    this.aviatorJet = this.add.sprite(80, 459, "vimaan_1");
+    this.aviatorJet = this.add.sprite(80, 464, "vimaan_1");
     this.aviatorJet.play("aviatorsJ");
 
     this.trailGraphics = this.add.graphics();
@@ -75,7 +75,7 @@ class mainScene extends Scene {
 
         this.curvePoints = [];
         let startX = 80;
-        let startY = 459;
+        let startY = 464;
         let endX = 770;
         let steps = 6;
 
@@ -160,7 +160,7 @@ class mainScene extends Scene {
       .on("pointerdown", () => {
         this.tweens.killTweensOf([this.aviatorJet, this.trailGraphics]);
         this.tweens.killAll();
-        this.aviatorJet.setPosition(80, 459);
+        this.aviatorJet.setPosition(80, 464);
         this.aviatorJet.setFrame(0);
         this.trailGraphics.clear();
         this.trailPoints = [];
