@@ -77,12 +77,13 @@ class mainScene extends Scene {
         let startX = 80;
         let startY = 464;
         let endX = 770;
+        let endY = 60;
         let steps = 6;
 
         for (let i = 0; i <= steps; i++) {
           let s = i / steps;
           let x = Phaser.Math.Linear(startX, endX, s);
-          let y = startY - Math.pow(s, 2.5) * 300;
+          let y = Phaser.Math.Linear(startY, endY, Math.pow(s, 2.5));
           this.curvePoints.push(new Phaser.Math.Vector2(x, y));
         }
 
@@ -101,19 +102,20 @@ class mainScene extends Scene {
         this.tweens.add({
           targets: { t: 0 },
           t: 1,
-          duration: 5000,
+          duration: 7000,
           onUpdate: (tween) => {
-            const t = tween.getValue();
-            const point = this.path.getPoint(t);
+            const rawT = tween.getValue();
+            const easedT = Phaser.Math.Easing.Sine.Out(rawT);
+            const point = this.path.getPoint(easedT);
             this.aviatorJet.setPosition(point.x, point.y);
 
-            if (t >= 1 && !hasReachedEnd) {
+            if (rawT >= 1 && !hasReachedEnd) {
               hasReachedEnd = true;
 
               let delayTweeen = this.tweens.add({
                 targets: [this.aviatorJet, this.trailGraphics],
                 y: "+=100",
-                duration: 3000,
+                duration: 7000,
                 yoyo: true,
                 repeat: -1,
                 ease: "Sine.easeInOut",
