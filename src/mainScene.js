@@ -115,7 +115,7 @@ class mainScene extends Scene {
               let delayTweeen = this.tweens.add({
                 targets: [this.aviatorJet, this.trailGraphics],
                 y: "+=100",
-                duration: 7000,
+                duration: 3000,
                 yoyo: true,
                 repeat: -1,
                 ease: "Sine.easeInOut",
