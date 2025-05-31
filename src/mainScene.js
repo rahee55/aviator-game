@@ -24,6 +24,13 @@ class mainScene extends Scene {
   }
 
   create() {
+    let screenType = "desktop";
+
+    switch (true) {
+      case this.scale.width < 500:
+        screenType = "mobile";
+        break;
+    }
     let bg = this.add.image(-1, 500, "bgR");
 
     if (!this.anims.exists("aviatorsJ")) {
@@ -35,18 +42,35 @@ class mainScene extends Scene {
       });
     }
 
-    this.aviatorJet = this.add.sprite(80, 464, "vimaan_1");
-    this.aviatorJet.play("aviatorsJ");
+    
 
     this.trailGraphics = this.add.graphics();
     this.trailGraphics.lineStyle(3, 0xff0044, 1);
     this.trailPoints = [];
 
     this.multiplier = 1;
-    this.text = this.add.text(450, 230, "1.00X", {
-      font: "bold 70px Arial",
-      color: "#ffffff",
-    });
+    switch (screenType) {
+      case "mobile":
+        this.text = this.add.text(150, 230, "1.00X", {
+          font: "bold 70px Arial",
+          color: "#ffffff",
+        });
+        this.text.setScale(0.7);
+        this.aviatorJet = this.add.sprite(70, 464, "vimaan_1");
+        this.aviatorJet.setScale(0.9);
+        this.add.image(200, 250, "bgbright").setScale(1.2);
+        break;
+      case "desktop":
+      default:
+        this.text = this.add.text(450, 230, "1.00X", {
+          font: "bold 70px Arial",
+          color: "#ffffff",
+        });
+        this.aviatorJet = this.add.sprite(80, 464, "vimaan_1");
+        this.add.image(500, 250, "bgbright").setScale(1.2);
+        break;
+    }
+    this.aviatorJet.play("aviatorsJ");
 
     this.lastUpdateTime = 0;
 
@@ -60,7 +84,7 @@ class mainScene extends Scene {
       this.trailGraphics.clear();
       this.trailPoints = [];
     });
-    let light = this.add.image(500, 250, "bgbright").setScale(1.2);
+    
 
     this.add
       .text(130, 20, "Start", {
@@ -79,6 +103,16 @@ class mainScene extends Scene {
         let endX = 770;
         let endY = 60;
         let steps = 6;
+
+        switch (screenType) {
+          case "mobile":
+            this.curvePoints = [];
+            startX = 70;
+            startY = 464;
+            endX = window.innerWidth - 100;
+            endY = 60;
+            steps = 6;
+        }
 
         for (let i = 0; i <= steps; i++) {
           let s = i / steps;
