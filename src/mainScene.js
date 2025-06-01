@@ -9,6 +9,7 @@ class mainScene extends Scene {
     this.trailGraphics = null;
     this.trailPoints = [];
     this.vimaan = null;
+    let screenType = "desktop";
   }
 
   preload() {
@@ -24,11 +25,9 @@ class mainScene extends Scene {
   }
 
   create() {
-    let screenType = "desktop";
-
     switch (true) {
       case this.scale.width < 500:
-        screenType = "mobile";
+        this.screenType = "mobile";
         break;
     }
     let bg = this.add.image(-1, 500, "bgR");
@@ -42,22 +41,20 @@ class mainScene extends Scene {
       });
     }
 
-    
-
     this.trailGraphics = this.add.graphics();
     this.trailGraphics.lineStyle(3, 0xff0044, 1);
     this.trailPoints = [];
 
     this.multiplier = 1;
-    switch (screenType) {
+    switch (this.screenType) {
       case "mobile":
         this.text = this.add.text(150, 230, "1.00X", {
           font: "bold 70px Arial",
           color: "#ffffff",
         });
-        this.text.setScale(0.7);
-        this.aviatorJet = this.add.sprite(70, 464, "vimaan_1");
-        this.aviatorJet.setScale(0.9);
+        this.text.setScale(0.9);
+        this.aviatorJet = this.add.sprite(50, 474, "vimaan_1");
+        this.aviatorJet.setScale(0.7);
         this.add.image(200, 250, "bgbright").setScale(1.2);
         break;
       case "desktop":
@@ -84,7 +81,6 @@ class mainScene extends Scene {
       this.trailGraphics.clear();
       this.trailPoints = [];
     });
-    
 
     this.add
       .text(130, 20, "Start", {
@@ -104,11 +100,11 @@ class mainScene extends Scene {
         let endY = 60;
         let steps = 6;
 
-        switch (screenType) {
+        switch (this.screenType) {
           case "mobile":
             this.curvePoints = [];
-            startX = 70;
-            startY = 464;
+            startX = 50;
+            startY = 474;
             endX = window.innerWidth - 100;
             endY = 60;
             steps = 6;
@@ -245,22 +241,51 @@ class mainScene extends Scene {
       return;
     }
 
-    if (
-      jet &&
-      (this.trailPoints.length === 0 ||
-        !Phaser.Math.Fuzzy.Equal(
-          jet.x,
-          this.trailPoints[this.trailPoints.length - 1].x,
-          1
-        ) ||
-        !Phaser.Math.Fuzzy.Equal(
-          jet.y,
-          this.trailPoints[this.trailPoints.length - 1].y,
-          1
-        ))
-    ) {
-      this.trailPoints.push(new Phaser.Math.Vector2(jet.x - 55, jet.y + 31));
+    switch (this.screenType) {
+      case "mobile":
+        if (
+          jet &&
+          (this.trailPoints.length === 0 ||
+            !Phaser.Math.Fuzzy.Equal(
+              jet.x,
+              this.trailPoints[this.trailPoints.length - 1].x,
+              1
+            ) ||
+            !Phaser.Math.Fuzzy.Equal(
+              jet.y,
+              this.trailPoints[this.trailPoints.length - 1].y,
+              1
+            ))
+        ) {
+          this.trailPoints.push(
+            new Phaser.Math.Vector2(jet.x - 38, jet.y + 23)
+          );
+        }
+        break;
+
+      case "desktop":
+      default:
+        if (
+          jet &&
+          (this.trailPoints.length === 0 ||
+            !Phaser.Math.Fuzzy.Equal(
+              jet.x,
+              this.trailPoints[this.trailPoints.length - 1].x,
+              1
+            ) ||
+            !Phaser.Math.Fuzzy.Equal(
+              jet.y,
+              this.trailPoints[this.trailPoints.length - 1].y,
+              1
+            ))
+        ) {
+          this.trailPoints.push(
+            new Phaser.Math.Vector2(jet.x - 55, jet.y + 31)
+          );
+        }
+        break;
     }
+
     if (this.trailPoints.length > 1) {
       this.trailGraphics.clear();
 
