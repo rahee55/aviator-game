@@ -9,7 +9,7 @@ class mainScene extends Scene {
     this.trailGraphics = null;
     this.trailPoints = [];
     this.vimaan = null;
-    let screenType = "desktop";
+    this.screenType = "desktop";
   }
 
   preload() {
@@ -62,7 +62,8 @@ class mainScene extends Scene {
         this.text = this.add.text(450, 230, "1.00X", {
           font: "bold 70px Arial",
           color: "#ffffff",
-        });
+        })
+        
         this.aviatorJet = this.add.sprite(80, 464, "vimaan_1");
         this.add.image(500, 250, "bgbright").setScale(1.2);
         break;
@@ -88,6 +89,7 @@ class mainScene extends Scene {
         color: "#ffffff",
         backgroundColor: "#ff0044",
         padding: { x: 10, y: 5 },
+        
       })
       .setInteractive()
       .on("pointerdown", () => {
@@ -143,14 +145,23 @@ class mainScene extends Scene {
               hasReachedEnd = true;
 
               let delayTweeen = this.tweens.add({
-                targets: [this.aviatorJet, this.trailGraphics],
-                y: "+=130",
+                targets: this.aviatorJet,
+                y: "+=100",
                 x: "+=30",
                 duration: 3000,
                 yoyo: true,
                 repeat: -1,
                 ease: "Sine.easeInOut",
               });
+              this.tweens.add({
+                targets: this.trailPoints,
+                y: "+=100",
+                x: "+=30",
+                duration: 3000,
+                yoyo: true,
+                repeat: -1,
+                ease: "Sine.easeInOut",
+              })
             }
           },
         });
@@ -177,7 +188,6 @@ class mainScene extends Scene {
           this.text.setColor(0xf00f00);
           this.tweens.killTweensOf(bg);
 
-          light.destroy();
         });
       });
 
