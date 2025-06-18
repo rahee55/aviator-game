@@ -41,6 +41,8 @@ class mainScene extends Scene {
       });
     }
 
+    console.log(this.cameras.main.width);
+
     this.trailGraphics = this.add.graphics();
     this.trailGraphics.lineStyle(3, 0xff0044, 1);
     this.trailPoints = [];
@@ -62,8 +64,8 @@ class mainScene extends Scene {
         this.text = this.add.text(450, 230, "1.00X", {
           font: "bold 70px Arial",
           color: "#ffffff",
-        })
-        
+        });
+
         this.aviatorJet = this.add.sprite(80, 464, "vimaan_1");
         this.add.image(500, 250, "bgbright").setScale(1.2);
         break;
@@ -89,7 +91,6 @@ class mainScene extends Scene {
         color: "#ffffff",
         backgroundColor: "#ff0044",
         padding: { x: 10, y: 5 },
-        
       })
       .setInteractive()
       .on("pointerdown", () => {
@@ -144,7 +145,7 @@ class mainScene extends Scene {
             if (rawT >= 1 && !hasReachedEnd) {
               hasReachedEnd = true;
 
-              let delayTweeen = this.tweens.add({
+              this.tweens.add({
                 targets: this.aviatorJet,
                 y: "+=100",
                 x: "+=30",
@@ -153,15 +154,17 @@ class mainScene extends Scene {
                 repeat: -1,
                 ease: "Sine.easeInOut",
               });
-              this.tweens.add({
-                targets: this.trailPoints,
-                y: "+=100",
-                x: "+=30",
-                duration: 3000,
-                yoyo: true,
-                repeat: -1,
-                ease: "Sine.easeInOut",
-              })
+              this.trailPoints.forEach((point) => {
+                this.tweens.add({
+                  targets: point,
+                  y: point.y + 100,
+                  x: point.x + 30,
+                  duration: 3000,
+                  yoyo: true,
+                  repeat: -1,
+                  ease: "Sine.easeInOut",
+                });
+              });
             }
           },
         });
@@ -179,19 +182,18 @@ class mainScene extends Scene {
           this.stopTriggered = true;
           this.tweens.add({
             targets: this.aviatorJet,
-            x: 1900,
+            x: this.cameras.main.width + 200,
             y: 100,
             duration: 600,
           });
           this.trailGraphics.clear();
           this.trailPoints = [];
-          this.text.setColor(0xf00f00);
+          this.text.setColor("#F00F00");
           this.tweens.killTweensOf(bg);
-
         });
       });
 
-    let resetButton = this.add
+    this.add
       .text(20, 20, "Reset", {
         font: "bold 28px Arial",
         fill: "#ffffff",
