@@ -42,7 +42,7 @@ class mainScene extends Scene {
       case width <= 320:
         this.planeDefaultPosition = {
           width: width * 0.18,
-          height: height * 0.84,
+          height: height * 0.845,
         };
         break;
       case width <= 332:
@@ -59,20 +59,20 @@ class mainScene extends Scene {
         break;
       case width <= 363:
         this.planeDefaultPosition = {
-          width: width * 0.21,
-          height: height * 0.77,
+          width: width * 0.17,
+          height: height * 0.945,
         };
         break;
       case width <= 378:
         this.planeDefaultPosition = {
-          width: width * 0.21,
-          height: height * 0.85,
+          width: width * 0.16,
+          height: height * 0.945,
         };
         break;
       case width <= 402:
         this.planeDefaultPosition = {
           width: width * 0.14,
-          height: height * 0.94,
+          height: height * 0.95,
         };
         break;
       case width <= 413:
@@ -84,7 +84,7 @@ class mainScene extends Scene {
       case width <= 463:
         this.planeDefaultPosition = {
           width: width * 0.13,
-          height: height * 0.94,
+          height: height * 0.945,
         };
         break;
       case width <= 588:
@@ -319,7 +319,7 @@ class mainScene extends Scene {
             [width * 0.18, width * 0.3],
             stageProgress
           );
-          y = height * 0.84;
+          y = height * 0.845;
         } else if (t < 0.45) {
           const stageProgress = (t - 0.3) / 0.15;
           x = Phaser.Math.Interpolation.Linear(
@@ -327,7 +327,7 @@ class mainScene extends Scene {
             stageProgress
           );
           y = Phaser.Math.Interpolation.Linear(
-            [height * 0.79, height * 0.6],
+            [height * 0.85, height * 0.6],
             stageProgress
           );
         } else if (t < 0.6) {
@@ -475,10 +475,10 @@ class mainScene extends Scene {
         if (t < 0.3) {
           const stageProgress = t / 0.3;
           x = Phaser.Math.Interpolation.Linear(
-            [width * 0.21, width * 0.3],
+            [width * 0.17, width * 0.3],
             stageProgress
           );
-          y = height * 0.77;
+          y = height * 0.945;
         } else if (t < 0.45) {
           const stageProgress = (t - 0.3) / 0.15;
           x = Phaser.Math.Interpolation.Linear(
@@ -486,7 +486,7 @@ class mainScene extends Scene {
             stageProgress
           );
           y = Phaser.Math.Interpolation.Linear(
-            [height * 0.77, height * 0.57],
+            [height * 0.955, height * 0.57],
             stageProgress
           );
         } else if (t < 0.6) {
@@ -528,10 +528,10 @@ class mainScene extends Scene {
         if (t < 0.3) {
           const stageProgress = t / 0.3;
           x = Phaser.Math.Interpolation.Linear(
-            [width * 0.21, width * 0.3],
+            [width * 0.16, width * 0.3],
             stageProgress
           );
-          y = height * 0.85;
+          y = height * 0.945;
         } else if (t < 0.45) {
           const stageProgress = (t - 0.3) / 0.15;
           x = Phaser.Math.Interpolation.Linear(
@@ -539,7 +539,7 @@ class mainScene extends Scene {
             stageProgress
           );
           y = Phaser.Math.Interpolation.Linear(
-            [height * 0.85, height * 0.55],
+            [height * 0.955, height * 0.55],
             stageProgress
           );
         } else if (t < 0.6) {
@@ -584,7 +584,7 @@ class mainScene extends Scene {
             [width * 0.14, width * 0.3],
             stageProgress
           );
-          y = height * 0.94;
+          y = height * 0.95;
         } else if (t < 0.45) {
           const stageProgress = (t - 0.3) / 0.15;
           x = Phaser.Math.Interpolation.Linear(
@@ -592,7 +592,7 @@ class mainScene extends Scene {
             stageProgress
           );
           y = Phaser.Math.Interpolation.Linear(
-            [height * 0.858, height * 0.55],
+            [height * 0.958, height * 0.55],
             stageProgress
           );
         } else if (t < 0.6) {
@@ -690,7 +690,7 @@ class mainScene extends Scene {
             [width * 0.13, width * 0.3],
             stageProgress
           );
-          y = height * 0.94;
+          y = height * 0.945;
         } else if (t < 0.45) {
           const stageProgress = (t - 0.3) / 0.15;
           x = Phaser.Math.Interpolation.Linear(
@@ -698,7 +698,7 @@ class mainScene extends Scene {
             stageProgress
           );
           y = Phaser.Math.Interpolation.Linear(
-            [height * 0.85, height * 0.6],
+            [height * 0.95, height * 0.6],
             stageProgress
           );
         } else if (t < 0.6) {
@@ -1094,10 +1094,10 @@ class mainScene extends Scene {
         startPoint = new Phaser.Math.Vector2(width * 0.09, height * 0.87);
         break;
       case width <= 363:
-        startPoint = new Phaser.Math.Vector2(width * 0.083, height * 0.858);
+        startPoint = new Phaser.Math.Vector2(width * 0.069, height * 0.99);
         break;
       case width <= 378:
-        startPoint = new Phaser.Math.Vector2(width * 0.083, height * 0.89);
+        startPoint = new Phaser.Math.Vector2(width * 0.061, height * 0.99);
         break;
       case width <= 402:
         startPoint = new Phaser.Math.Vector2(width * 0.038, height * 0.99);
@@ -1135,14 +1135,14 @@ class mainScene extends Scene {
         if (progress < 0.33) {
           controlPoints = [
             new Phaser.Math.Vector2(width * 0.1, height * 0.899),
-            new Phaser.Math.Vector2(width * 0.17, height * 0.875),
+            new Phaser.Math.Vector2(width * 0.21, height * 0.875),
             new Phaser.Math.Vector2(width * 0.7, height * 0.1),
             new Phaser.Math.Vector2(width * 0.85, height * 0.35),
           ];
         } else {
           controlPoints = [
             new Phaser.Math.Vector2(width * 0.1, height * 0.899),
-            new Phaser.Math.Vector2(width * 0.17, height * 0.875),
+            new Phaser.Math.Vector2(width * 0.21, height * 0.875),
             new Phaser.Math.Vector2(width * 0.7, height * 0.1),
             new Phaser.Math.Vector2(width * 0.85, height * 0.35),
           ];
@@ -1183,24 +1183,17 @@ class mainScene extends Scene {
         }
         break;
       case width <= 363:
-        if (progress < 0.3) {
+        if (progress < 0.32) {
           controlPoints = [
-            new Phaser.Math.Vector2(width * 0.1, height * 0.858),
-            new Phaser.Math.Vector2(width * 0.1, height * 0.858),
-            new Phaser.Math.Vector2(width * 0.7, height * 0.08),
-            new Phaser.Math.Vector2(width * 0.85, height * 0.35),
-          ];
-        } else if (progress < 0.33) {
-          controlPoints = [
-            new Phaser.Math.Vector2(width * 0.2, height * 0.858),
-            new Phaser.Math.Vector2(width * 0.2, height * 0.84),
+            new Phaser.Math.Vector2(width * 0.2, height * 0.99),
+            new Phaser.Math.Vector2(width * 0.2, height * 0.98),
             new Phaser.Math.Vector2(width * 0.7, height * 0.08),
             new Phaser.Math.Vector2(width * 0.85, height * 0.35),
           ];
         } else {
           controlPoints = [
-            new Phaser.Math.Vector2(width * 0.2, height * 0.858),
-            new Phaser.Math.Vector2(width * 0.3, height * 0.79),
+            new Phaser.Math.Vector2(width * 0.2, height * 0.99),
+            new Phaser.Math.Vector2(width * 0.2, height * 0.98),
             new Phaser.Math.Vector2(width * 0.7, height * 0.08),
             new Phaser.Math.Vector2(width * 0.85, height * 0.35),
           ];
@@ -1209,22 +1202,15 @@ class mainScene extends Scene {
       case width <= 378:
         if (progress < 0.2) {
           controlPoints = [
-            new Phaser.Math.Vector2(width * 0.1, height * 0.89),
-            new Phaser.Math.Vector2(width * 0.1, height * 0.89),
-            new Phaser.Math.Vector2(width * 0.7, height * 0.08),
-            new Phaser.Math.Vector2(width * 0.85, height * 0.45),
-          ];
-        } else if (progress < 0.32) {
-          controlPoints = [
-            new Phaser.Math.Vector2(width * 0.17, height * 0.89),
-            new Phaser.Math.Vector2(width * 0.17, height * 0.88),
+            new Phaser.Math.Vector2(width * 0.1, height * 0.99),
+            new Phaser.Math.Vector2(width * 0.1, height * 0.99),
             new Phaser.Math.Vector2(width * 0.7, height * 0.08),
             new Phaser.Math.Vector2(width * 0.85, height * 0.45),
           ];
         } else {
           controlPoints = [
-            new Phaser.Math.Vector2(width * 0.17, height * 0.89),
-            new Phaser.Math.Vector2(width * 0.27, height * 0.84),
+            new Phaser.Math.Vector2(width * 0.17, height * 0.99),
+            new Phaser.Math.Vector2(width * 0.21, height * 0.98),
             new Phaser.Math.Vector2(width * 0.7, height * 0.08),
             new Phaser.Math.Vector2(width * 0.85, height * 0.45),
           ];
