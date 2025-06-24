@@ -4,12 +4,11 @@ class mainScene extends Scene {
   constructor() {
     super({ key: "mainScene" });
     this.aviatorJet = null;
-    this.trailGraphics = null;
-    this.trailPoints = [];
     this.screenType = "desktop";
     this.progress = 0;
     this.multiplier = 1;
     this.planeDefaultPosition = null;
+    this.newStopTime = 0
   }
 
   preload() {
@@ -77,8 +76,8 @@ class mainScene extends Scene {
         break;
       case width <= 413:
         this.planeDefaultPosition = {
-          width: width * 0.17,
-          height: height * 0.79,
+          width: width * 0.14,
+          height: height * 0.94,
         };
         break;
       case width <= 463:
@@ -164,6 +163,8 @@ class mainScene extends Scene {
     this.drawBezierCurve(0);
     this.lastUpdateTime = 0;
     this.stopTriggered = true;
+
+    this.bezierGraphics.clear();
 
     this.add
       .text(130, 20, "Start", {
@@ -266,12 +267,12 @@ class mainScene extends Scene {
       repeat: -1,
     });
 
-    const newStopTime = Phaser.Math.Between(20000, 60000);
-    this.time.delayedCall(newStopTime, () => {
+    this.newStopTime = Phaser.Math.Between(20000, 60000);
+    this.time.delayedCall(this.newStopTime, () => {
       this.stopTriggered = true;
       this.tweens.add({
         targets: this.aviatorJet,
-        x: this.cameras.main.width + 200,
+        x: this.cameras.main.width + 1000,
         y: 100,
         duration: 600,
       });
@@ -288,19 +289,36 @@ class mainScene extends Scene {
     const height = this.cameras.main.height;
 
     let speed;
-    switch (true) {
-      case this.progress < 0.3:
-        speed = 0.00275;
-        break;
-      case this.progress < 0.45:
-        speed = 0.0001;
-        break;
-      case this.progress < 0.6:
-        speed = 0.00003;
-        break;
-      default:
-        speed = 0.00002;
-        break;
+    if (width <= 580) {
+      switch (true) {
+        case this.progress < 0.3:
+          speed = 0.00775;
+          break;
+        case this.progress < 0.45:
+          speed = 0.0011;
+          break;
+        case this.progress < 0.6:
+          speed = 0.00003;
+          break;
+        default:
+          speed = 0.00002;
+          break;
+      }
+    } else {
+      switch (true) {
+        case this.progress < 0.3:
+          speed = 0.00275;
+          break;
+        case this.progress < 0.45:
+          speed = 0.0009;
+          break;
+        case this.progress < 0.6:
+          speed = 0.00003;
+          break;
+        default:
+          speed = 0.00002;
+          break;
+      }
     }
 
     this.progress += speed;
@@ -634,10 +652,10 @@ class mainScene extends Scene {
         if (t < 0.3) {
           const stageProgress = t / 0.3;
           x = Phaser.Math.Interpolation.Linear(
-            [width * 0.17, width * 0.3],
+            [width * 0.14, width * 0.3],
             stageProgress
           );
-          y = height * 0.79;
+          y = height * 0.94;
         } else if (t < 0.45) {
           const stageProgress = (t - 0.3) / 0.15;
           x = Phaser.Math.Interpolation.Linear(
@@ -645,7 +663,7 @@ class mainScene extends Scene {
             stageProgress
           );
           y = Phaser.Math.Interpolation.Linear(
-            [height * 0.79, height * 0.6],
+            [height * 0.95, height * 0.6],
             stageProgress
           );
         } else if (t < 0.6) {
@@ -1016,7 +1034,7 @@ class mainScene extends Scene {
             stageProgress
           );
           y = Phaser.Math.Interpolation.Linear(
-            [height * 0.89, height * 0.71],
+            [height * 0.92, height * 0.71],
             stageProgress
           );
         } else if (t < 0.6) {
@@ -1103,7 +1121,7 @@ class mainScene extends Scene {
         startPoint = new Phaser.Math.Vector2(width * 0.038, height * 0.99);
         break;
       case width <= 413:
-        startPoint = new Phaser.Math.Vector2(width * 0.075, height * 0.87);
+        startPoint = new Phaser.Math.Vector2(width * 0.05, height * 0.99);
         break;
       case width <= 463:
         startPoint = new Phaser.Math.Vector2(width * 0.04, height * 0.99);
@@ -1236,14 +1254,14 @@ class mainScene extends Scene {
       case width <= 413:
         if (progress < 0.35) {
           controlPoints = [
-            new Phaser.Math.Vector2(width * 0.05, height * 0.87),
-            new Phaser.Math.Vector2(width * 0.2, height * 0.87),
+            new Phaser.Math.Vector2(width * 0.05, height * 0.99),
+            new Phaser.Math.Vector2(width * 0.2, height * 0.97),
             new Phaser.Math.Vector2(width * 0.7, height * 0.08),
             new Phaser.Math.Vector2(width * 0.85, height * 0.35),
           ];
         } else {
           controlPoints = [
-            new Phaser.Math.Vector2(width * 0.2, height * 0.87),
+            new Phaser.Math.Vector2(width * 0.2, height * 0.97),
             new Phaser.Math.Vector2(width * 0.28, height * 0.78),
             new Phaser.Math.Vector2(width * 0.7, height * 0.08),
             new Phaser.Math.Vector2(width * 0.85, height * 0.35),
@@ -1643,7 +1661,9 @@ class mainScene extends Scene {
     );
     this.progress = 0;
     this.text.setText("1.00X");
+    this.text.setFill("#ffff");
     this.stopTriggered = true;
+    this.newStopTime = 0
   }
 }
 
