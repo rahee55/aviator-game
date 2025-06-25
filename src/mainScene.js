@@ -131,8 +131,6 @@ class mainScene extends Scene {
     }
 
     this.bezierGraphics = this.add.graphics();
-    this.trailGraphics = this.add.graphics();
-    this.trailGraphics.lineStyle(3, 0xff0044, 1);
 
     const textStyle = {
       font: "bold 70px Arial",
@@ -140,7 +138,7 @@ class mainScene extends Scene {
     };
 
     if (this.screenType === "mobile") {
-      this.text = this.add.text(150, 230, "1.00X", textStyle).setScale(0.9);
+      this.text = this.add.text(70, 210, "1.00X", textStyle).setScale(0.9);
       this.aviatorJet = this.add
         .sprite(
           this.planeDefaultPosition.width,
@@ -210,6 +208,10 @@ class mainScene extends Scene {
   }
 
   startFlight(bg) {
+    this.tweens.killAll();
+    this.lastUpdateTime = 0;
+    this.stopTriggered = true;
+
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
 
@@ -259,7 +261,7 @@ class mainScene extends Scene {
       },
     });
 
-    const bgTween = this.tweens.add({
+    this.tweens.add({
       targets: bg,
       angle: 360,
       duration: 50000,
@@ -1660,10 +1662,12 @@ class mainScene extends Scene {
       this.planeDefaultPosition.height
     );
     this.progress = 0;
+    this.multiplier = 1;
     this.text.setText("1.00X");
     this.text.setFill("#ffff");
     this.stopTriggered = true;
     this.newStopTime = 0
+    this.lastUpdateTime = 0;
   }
 }
 
